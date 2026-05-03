@@ -1,0 +1,83 @@
+---
+const links = [
+  { name: 'Home', href: '#' },
+  { name: 'Products', href: '#products' },
+  { name: 'Calculator', href: '#calculator' },
+  { name: 'About', href: '#about' },
+  { name: 'Contact', href: '#contact' },
+];
+---
+
+<header class="sticky top-0 z-50 w-full border-b border-slate-800 bg-slate-900/80 backdrop-blur-md">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+      <!-- Logo -->
+      <div class="flex-shrink-0">
+        <a href="#" class="flex items-center gap-3 group">
+          <img src="/images/logo.png" alt="Dave Enterprises Logo" class="h-12 w-auto object-contain bg-white rounded-md p-1" />
+          <span class="font-heading font-bold text-xl tracking-tight text-white hidden sm:block">
+            Dave <span class="text-blue-500">Enterprises</span>
+          </span>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex space-x-8">
+        {links.map((link) => (
+          <a
+            href={link.href}
+            class="text-sm font-medium text-slate-300 hover:text-yellow-400 transition-colors py-2"
+          >
+            {link.name}
+          </a>
+        ))}
+      </nav>
+
+      <!-- CTA Button -->
+      <div class="hidden md:flex items-center">
+        <a href="#contact" class="inline-flex items-center justify-center px-6 py-2.5 text-sm font-semibold text-slate-900 bg-yellow-500 rounded-md hover:bg-yellow-400 transition-colors shadow-lg shadow-yellow-500/20 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-slate-900">
+          Connect With Us
+        </a>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div class="md:hidden flex items-center">
+        <button type="button" class="text-slate-300 hover:text-white p-2" aria-controls="mobile-menu" aria-expanded="false" id="mobile-menu-btn">
+          <span class="sr-only">Open main menu</span>
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile menu, hidden by default -->
+  <div class="md:hidden hidden bg-slate-800 border-b border-slate-700" id="mobile-menu">
+    <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+      {links.map((link) => (
+        <a
+          href={link.href}
+          class="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-700"
+        >
+          {link.name}
+        </a>
+      ))}
+      <a href="#contact" class="block w-full text-center mt-4 px-3 py-3 rounded-md text-base font-medium text-slate-900 bg-yellow-500 hover:bg-yellow-400">
+        Connect With Us
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Simple mobile menu toggle
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  
+  if (btn && menu) {
+    btn.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+    });
+  }
+</script>

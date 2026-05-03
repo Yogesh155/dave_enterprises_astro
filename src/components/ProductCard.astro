@@ -1,0 +1,52 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  icon: string;
+  colorClass: string;
+  guide?: string;
+}
+
+const { title, description, icon, colorClass, guide } = Astro.props;
+---
+
+<div class="group relative bg-slate-800/50 rounded-2xl p-8 border border-slate-700/50 hover:border-slate-600 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 overflow-hidden backdrop-blur-sm">
+  <!-- Top glow effect -->
+  <div class={`absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-${colorClass.split('-')[1]}-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
+  
+  <div class="relative z-10 flex flex-col h-full">
+    <div class={`w-14 h-14 rounded-xl flex items-center justify-center mb-6 bg-slate-900 border border-slate-700 shadow-inner group-hover:scale-110 transition-transform duration-300`}>
+      <!-- Icon slot, expecting an SVG string or similar -->
+      <div class={`text-${colorClass.split('-')[1]}-400 group-hover:text-${colorClass.split('-')[1]}-300`} set:html={icon} />
+    </div>
+    
+    <h3 class="text-xl font-heading font-semibold text-white mb-3 group-hover:text-blue-400 transition-colors">{title}</h3>
+    
+    <p class="text-slate-400 leading-relaxed mb-6 flex-grow">
+      {description}
+    </p>
+    
+    <div class="flex items-center gap-4 mt-auto">
+      <button 
+        type="button" 
+        class="read-guide-btn inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-slate-900 bg-yellow-500 rounded-md hover:bg-yellow-400 transition-colors shadow-lg shadow-yellow-500/20"
+        data-title={title}
+        data-guide={guide || 'Guide information coming soon.'}
+      >
+        <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+        </svg>
+        Read Guide
+      </button>
+      <a href="#contact" class="inline-flex items-center text-sm font-medium text-slate-300 hover:text-white group/link px-2 py-2">
+        Inquire
+        <svg class="w-4 h-4 ml-1 group-hover/link:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </a>
+    </div>
+  </div>
+  
+  <!-- Subtle background glow on hover -->
+  <div class={`absolute -inset-x-4 -inset-y-4 z-0 bg-${colorClass.split('-')[1]}-500/10 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`}></div>
+</div>

@@ -1,0 +1,317 @@
+---
+---
+
+<section id="calculator" class="py-24 bg-slate-900 border-t border-slate-800 relative">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2 class="text-3xl md:text-4xl font-heading font-bold text-white mb-4">Power Requirement Calculator</h2>
+      <div class="w-20 h-1 bg-blue-500 mx-auto rounded-full mb-6"></div>
+      <p class="text-slate-400 text-lg">Estimate the inverter size and battery capacity you need by selecting your appliances and desired backup time.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-6xl mx-auto">
+      
+      <!-- Appliance Load Section (Left) -->
+      <div class="lg:col-span-7 bg-slate-800/50 border border-slate-700 rounded-2xl p-6 md:p-8 shadow-xl">
+        <h3 class="text-xl font-bold text-white mb-6 border-b border-slate-700 pb-4 flex items-center">
+          <svg class="w-6 h-6 text-yellow-500 mr-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          Step 1: Select Your Appliances
+        </h3>
+        
+        <div class="space-y-4" id="appliance-list">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-slate-700 flex justify-between items-end">
+          <div>
+            <p class="text-sm text-slate-400 mb-1">Total Connected Load</p>
+            <div class="text-3xl font-bold text-white"><span id="total-watts">0</span> <span class="text-lg text-slate-500 font-normal">Watts</span></div>
+          </div>
+          <button id="reset-btn" class="px-4 py-2 text-sm font-medium text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors border border-slate-700">
+            Reset All
+          </button>
+        </div>
+      </div>
+
+      <!-- Calculation Results Section (Right) -->
+      <div class="lg:col-span-5 space-y-6">
+        
+        <!-- Backup Time Input -->
+        <div class="bg-slate-800/50 border border-slate-700 rounded-2xl p-6 md:p-8 shadow-xl">
+          <h3 class="text-xl font-bold text-white mb-6 border-b border-slate-700 pb-4 flex items-center">
+            <svg class="w-6 h-6 text-blue-500 mr-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Step 2: Backup Duration
+          </h3>
+          
+          <div>
+            <label for="backup-slider" class="block text-sm font-medium text-slate-300 mb-4">Required Backup Time (Hours)</label>
+            <div class="flex items-center space-x-4">
+              <input type="range" id="backup-slider" min="1" max="12" value="4" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500">
+              <div class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 w-20 text-center shrink-0">
+                <span id="backup-hours-display" class="text-xl font-bold text-white">4</span><span class="text-xs text-slate-400 block">hrs</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Results Card -->
+        <div class="bg-gradient-to-br from-blue-900/40 to-slate-900 border border-blue-500/30 rounded-2xl p-6 md:p-8 shadow-xl relative overflow-hidden">
+          <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl"></div>
+          
+          <h3 class="text-xl font-bold text-white mb-6">Your Requirements</h3>
+          
+          <div class="space-y-6 relative z-10">
+            <div>
+              <p class="text-sm text-slate-400 mb-1">Recommended Inverter</p>
+              <div class="mt-1">
+                <span id="req-inverter" class="text-xl font-bold text-yellow-400">Please select load</span>
+              </div>
+              <p class="text-xs text-slate-500 mt-2">Calculated at 80% inverter efficiency (PF: 0.8)</p>
+            </div>
+            
+            <div class="border-t border-slate-700/50 pt-6">
+              <p class="text-sm text-slate-400 mb-1">Recommended Battery</p>
+              <div class="mt-1">
+                <span id="req-battery" class="text-xl font-bold text-blue-400">Please select load</span>
+              </div>
+              <p id="system-voltage-text" class="text-xs text-slate-500 mt-2">Based on a 12V system</p>
+            </div>
+          </div>
+
+          <button id="whatsapp-btn" class="w-full mt-8 bg-[#25D366] hover:bg-[#20bd5a] text-slate-900 font-bold py-3 px-4 rounded-xl transition-colors shadow-lg shadow-green-500/20 flex items-center justify-center space-x-2 opacity-50 cursor-not-allowed disabled:pointer-events-none" disabled>
+            <svg class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+            <span>Get Quote on WhatsApp</span>
+          </button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+<script>
+  // Add an event listener to ensure script runs when component is loaded
+  document.addEventListener('DOMContentLoaded', initCalculator);
+
+  function initCalculator() {
+    const appliances = [
+      { id: 'ceiling-fan', name: 'Ceiling Fan', watts: 75 },
+      { id: 'tube-light', name: 'Tube Light', watts: 40 },
+      { id: 'led-bulb', name: 'LED Bulb', watts: 9 },
+      { id: 'tv', name: 'Television (LED/LCD)', watts: 100 },
+      { id: 'laptop', name: 'Laptop', watts: 65 },
+      { id: 'fridge', name: 'Refrigerator (250L)', watts: 250 },
+      { id: 'cooler', name: 'Desert Cooler', watts: 250 },
+      { id: 'pc', name: 'Desktop PC', watts: 150 },
+    ];
+    
+    const applianceListEl = document.getElementById('appliance-list');
+    const totalWattsEl = document.getElementById('total-watts');
+    const reqInverterEl = document.getElementById('req-inverter');
+    const reqBatteryEl = document.getElementById('req-battery');
+    const backupSlider = document.getElementById('backup-slider');
+    const backupDisplay = document.getElementById('backup-hours-display');
+    const systemVoltageText = document.getElementById('system-voltage-text');
+    const resetBtn = document.getElementById('reset-btn');
+    const whatsappBtn = document.getElementById('whatsapp-btn');
+
+    if (!applianceListEl) return; // Guard clause in case component isn't on page
+
+    const inverterModels = [
+      { capacity: 700, name: '700VA Pure Sine Wave Inverter' },
+      { capacity: 900, name: '900VA Pure Sine Wave Inverter' },
+      { capacity: 1100, name: '1100VA Pure Sine Wave Inverter' },
+      { capacity: 1500, name: '1500VA High Capacity Inverter' },
+      { capacity: 2000, name: '2000VA High Capacity Inverter' },
+      { capacity: 2500, name: '2500VA High Capacity Inverter' },
+      { capacity: 3500, name: '3500VA High Capacity Inverter' }
+    ];
+
+    const batteryModels = [
+      { capacity: 100, name: '100Ah Tubular Battery' },
+      { capacity: 150, name: '150Ah Tall Tubular Battery' },
+      { capacity: 165, name: '165Ah Tall Tubular Battery' },
+      { capacity: 200, name: '200Ah Jumbo Tubular Battery' },
+      { capacity: 220, name: '220Ah Jumbo Tubular Battery' },
+      { capacity: 230, name: '230Ah High Capacity Battery' },
+      { capacity: 250, name: '250Ah High Capacity Battery' },
+      { capacity: 260, name: '260Ah High Capacity Battery' },
+      { capacity: 300, name: '300Ah Ultra Capacity Battery' }
+    ];
+
+    const state = appliances.reduce((acc, curr) => {
+      acc[curr.id] = { ...curr, count: 0 };
+      return acc;
+    }, {});
+
+    function renderAppliances() {
+      applianceListEl.innerHTML = '';
+      
+      Object.values(state).forEach(app => {
+        const el = document.createElement('div');
+        el.className = 'flex items-center justify-between p-3 bg-slate-900/50 rounded-xl border border-slate-700/50 hover:border-slate-600 transition-colors';
+        el.innerHTML = `
+          <div>
+            <h4 class="text-white font-medium">${app.name}</h4>
+            <p class="text-xs text-slate-400">${app.watts}W each</p>
+          </div>
+          <div class="flex items-center bg-slate-800 rounded-lg p-1 border border-slate-700 shrink-0 ml-4">
+            <button class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 rounded-md transition-colors dec-btn" data-id="${app.id}">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" /></svg>
+            </button>
+            <span class="w-8 text-center text-white font-medium">${app.count}</span>
+            <button class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 rounded-md transition-colors inc-btn" data-id="${app.id}">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+            </button>
+          </div>
+        `;
+        applianceListEl.appendChild(el);
+      });
+
+      document.querySelectorAll('.inc-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = e.currentTarget.getAttribute('data-id');
+          if (id) {
+            state[id].count++;
+            updateCalculations();
+            renderAppliances();
+          }
+        });
+      });
+
+      document.querySelectorAll('.dec-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = e.currentTarget.getAttribute('data-id');
+          if (id && state[id].count > 0) {
+            state[id].count--;
+            updateCalculations();
+            renderAppliances();
+          }
+        });
+      });
+    }
+
+    function updateCalculations() {
+      let totalWatts = 0;
+      Object.values(state).forEach(app => {
+        totalWatts += (app.watts * app.count);
+      });
+
+      const backupHours = parseInt(backupSlider?.value || '4');
+      
+      const requiredInverterVA = Math.ceil(totalWatts / 0.8);
+
+      let systemVoltage = 12;
+      let numBatteries = 1;
+      
+      if (requiredInverterVA > 1100) {
+        systemVoltage = 24;
+        numBatteries = 2;
+      }
+      if (requiredInverterVA > 2000) {
+        systemVoltage = 48;
+        numBatteries = 4;
+      }
+      
+      const requiredBatteryAh = Math.ceil((totalWatts * backupHours) / systemVoltage);
+
+      if (totalWattsEl) totalWattsEl.textContent = totalWatts.toString();
+      
+      if (reqInverterEl) {
+        if (totalWatts > 0) {
+          const invModel = inverterModels.find(m => m.capacity >= requiredInverterVA);
+          reqInverterEl.textContent = invModel ? `${invModel.name}` : `Custom Inverter (~${requiredInverterVA}VA)`;
+        } else {
+          reqInverterEl.textContent = 'Please select load';
+        }
+      }
+      
+      if (reqBatteryEl) {
+        if (totalWatts > 0) {
+          const batModel = batteryModels.find(m => m.capacity >= requiredBatteryAh);
+          reqBatteryEl.textContent = batModel ? `${numBatteries}x ${batModel.name}` : `${numBatteries}x Custom Battery (~${requiredBatteryAh}Ah)`;
+        } else {
+          reqBatteryEl.textContent = 'Please select load';
+        }
+      }
+      
+      if (systemVoltageText) {
+        systemVoltageText.textContent = totalWatts > 0 
+          ? `Based on a ${systemVoltage}V system (${numBatteries} battery/batteries required)` 
+          : 'Based on a 12V system';
+      }
+
+      if (whatsappBtn) {
+        if (totalWatts > 0) {
+          whatsappBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+          whatsappBtn.removeAttribute('disabled');
+        } else {
+          whatsappBtn.classList.add('opacity-50', 'cursor-not-allowed');
+          whatsappBtn.setAttribute('disabled', 'true');
+        }
+      }
+    }
+
+    if (backupSlider) {
+      backupSlider.addEventListener('input', (e) => {
+        const val = e.target.value;
+        if (backupDisplay) backupDisplay.textContent = val;
+        updateCalculations();
+      });
+    }
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        Object.values(state).forEach(app => app.count = 0);
+        if (backupSlider) {
+          backupSlider.value = '4';
+          if (backupDisplay) backupDisplay.textContent = '4';
+        }
+        updateCalculations();
+        renderAppliances();
+      });
+    }
+
+    if (whatsappBtn) {
+      whatsappBtn.addEventListener('click', () => {
+        const totalWatts = parseInt(totalWattsEl?.textContent || '0');
+        if (totalWatts === 0) return;
+
+        const inverterStr = reqInverterEl?.textContent || 'None';
+        const batteryStr = reqBatteryEl?.textContent || 'None';
+        const hours = backupSlider?.value || '4';
+
+        let message = `Hello Dave Enterprises! I used your Power Calculator and I'd like to get a quote for a setup.\\n\\n`;
+        message += `*My Requirements:*\\n`;
+        
+        // Add appliance list
+        let hasAppliances = false;
+        Object.values(state).forEach(app => {
+          if (app.count > 0) {
+            if (!hasAppliances) message += `_Appliances:_\\n`;
+            message += `- \${app.count}x \${app.name} (\${app.watts}W)\\n`;
+            hasAppliances = true;
+          }
+        });
+        
+        message += `- *Total Load:* \${totalWatts} Watts\\n`;
+        message += `- *Desired Backup:* \${hours} Hours\\n\\n`;
+        message += `*Recommended Setup:*\\n`;
+        message += `- Inverter: \${inverterStr}\\n`;
+        message += `- Battery: \${batteryStr}\\n\\n`;
+        message += `Can you please share the pricing and options for this setup?`;
+
+        const encodedMessage = encodeURIComponent(message);
+        window.open(`https://wa.me/919636185543?text=\${encodedMessage}`, '_blank');
+      });
+    }
+
+    // Initial render
+    renderAppliances();
+    updateCalculations();
+  }
+</script>
