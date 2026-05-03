@@ -285,28 +285,28 @@
         const batteryStr = reqBatteryEl?.textContent || 'None';
         const hours = backupSlider?.value || '4';
 
-        let message = `Hello Dave Enterprises! I used your Power Calculator and I'd like to get a quote for a setup.\\n\\n`;
-        message += `*My Requirements:*\\n`;
+        let message = `Hello Dave Enterprises! I used your Power Calculator and I'd like to get a quote for a setup.\n\n`;
+        message += `*My Requirements:*\n`;
         
         // Add appliance list
         let hasAppliances = false;
         Object.values(state).forEach(app => {
           if (app.count > 0) {
-            if (!hasAppliances) message += `_Appliances:_\\n`;
-            message += `- \${app.count}x \${app.name} (\${app.watts}W)\\n`;
+            if (!hasAppliances) message += `_Appliances:_\n`;
+            message += `- ${app.count}x ${app.name} (${app.watts}W)\n`;
             hasAppliances = true;
           }
         });
         
-        message += `- *Total Load:* \${totalWatts} Watts\\n`;
-        message += `- *Desired Backup:* \${hours} Hours\\n\\n`;
-        message += `*Recommended Setup:*\\n`;
-        message += `- Inverter: \${inverterStr}\\n`;
-        message += `- Battery: \${batteryStr}\\n\\n`;
+        message += `- *Total Load:* ${totalWatts} Watts\n`;
+        message += `- *Desired Backup:* ${hours} Hours\n\n`;
+        message += `*Recommended Setup:*\n`;
+        message += `- Inverter: ${inverterStr}\n`;
+        message += `- Battery: ${batteryStr}\n\n`;
         message += `Can you please share the pricing and options for this setup?`;
 
         const encodedMessage = encodeURIComponent(message);
-        window.open(`https://wa.me/919636185543?text=\${encodedMessage}`, '_blank');
+        window.open(`https://wa.me/919636185543?text=${encodedMessage}`, '_blank');
       });
     }
 
